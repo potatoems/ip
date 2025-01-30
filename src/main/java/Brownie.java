@@ -1,12 +1,13 @@
 import java.util.Scanner;
 
 public class Brownie{
-    private static final String horizontalLine = "____________________________________________________________\n";
+    private static final String horizontalLine = "____________________________________________________________";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        Tasks tasks = new Tasks();
 
-        String greeting = "Hello! I'm BROWNIE\nWhat can I do for you?\n";
+        String greeting = "\nHello! I'm BROWNIE\nWhat can I do for you?\n";
         String farewell = "Bye. Hope to see you again soon!\n";
 
         System.out.println(horizontalLine + greeting + horizontalLine);
@@ -18,11 +19,19 @@ public class Brownie{
                 break;
             }
 
-            echo(command);
-        }
-    }
+            // check for list command. Automatically skip anything that is less than 4 characters
+            // skips to next iteration after listing tasks
+            if (command.length() > 3 && command.substring(0, 4).equalsIgnoreCase("list")) {
+                tasks.list();
+                System.out.println(horizontalLine);
+                continue;
+            }
 
-    private static void echo(String command) {
-        System.out.println(horizontalLine + command + "\n" + horizontalLine);
+            // automatically add any task that is listed
+            System.out.println(horizontalLine);
+            tasks.add(command);
+            System.out.println(horizontalLine);
+
+        }
     }
 }
