@@ -10,23 +10,33 @@ public class Tasks {
     // checks for todos, events and deadlines, initialise to appropriate task type
     // taskType T represents todos, E represents events, D represents deadlines
     public void add(String task, char taskType) {
-        System.out.println("Got it. I've added this task:");
         Task t;
 
-        if (taskType == 'T') {
-            t = new ToDo(task);
-        } else if (taskType == 'E') {
-            String[] taskAndDates = task.split(" /from | /to ");
-            t = new Event(taskAndDates[0], taskAndDates[1], taskAndDates[2]);
-        } else if (taskType == 'D') {
-            String[] taskAndDeadline = task.split(" /by ");
-            t = new Deadline(taskAndDeadline[0], taskAndDeadline[1]);
-        } else {
-            t = new Task(task);
-        }
+        try {
+            if (taskType == 'T') {
+                t = new ToDo(task);
+            } else if (taskType == 'E') {
+                String[] taskAndDates = task.split(" /from | /to ");
+                if (taskAndDates.length < 3) {
+                    throw new DukeException("Would you mind double confirming your date format? /from xxx /to xxx");
+                }
+                t = new Event(taskAndDates[0], taskAndDates[1], taskAndDates[2]);
+            } else if (taskType == 'D') {
+                String[] taskAndDeadline = task.split(" /by ");
+                if (taskAndDeadline.length < 2) {
+                    throw new DukeException("Would you mind double confirming your date format? /by xxx");
+                }
+                t = new Deadline(taskAndDeadline[0], taskAndDeadline[1]);
+            } else {
+                t = new Task(task);
+            }
 
-        tasks.add(t);
-        System.out.println("  " + t + "\nNow you have " + tasks.size() +" tasks in the list.");
+            tasks.add(t);
+            System.out.println("Got it. I've added this task:");
+            System.out.println("  " + t + "\nNow you have " + tasks.size() + " tasks in the list.");
+        } catch (DukeException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void updateTask(int taskNumber, boolean toBeMarked) {
