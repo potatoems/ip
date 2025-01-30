@@ -52,6 +52,17 @@ public class Brownie{
                     continue;
                 }
 
+                // delete task from list
+                if (taskDescription.startsWith("delete")) {
+                    if (scriptLength < 8) {
+                        throw new DukeException("Which task would you like me to delete? (please give me a number)");
+                    }
+
+                    tasks.deleteTask(Integer.parseInt(taskDescription.substring(7)));
+                    System.out.println(horizontalLine);
+                    continue;
+                }
+
                 // automatically add any task that is listed
                 // checks for todos, events and deadlines, initialise to appropriate task type
                 System.out.println(horizontalLine);
